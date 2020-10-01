@@ -2014,7 +2014,7 @@ static int __init gsb_init_module(void)
 	pgsb_ctx->gsb_lock_acquired = false;
 
 
-	wakeup_source_init(&pgsb_ctx->gsb_wake_src, "gsb_wake_source");
+	pgsb_ctx->gsb_wake_src = wakeup_source_register(NULL, "gsb_wake_source");
 	pgsb_ctx->do_we_need_wake_source = false;
 	pgsb_ctx->is_wake_src_acquired = false;
 	pgsb_ctx->mem_alloc_if_ipa_context = 0;
@@ -2145,7 +2145,7 @@ static void __exit gsb_exit_module(void)
 	{
 		__pm_relax(&pgsb_ctx->gsb_wake_src);
 	}
-	wakeup_source_trash(&pgsb_ctx->gsb_wake_src);
+	wakeup_source_unregister(&pgsb_ctx->gsb_wake_src);
 
 	gsb_debugfs_exit(pgsb_ctx);
 	gsb_ioctl_deinit();
